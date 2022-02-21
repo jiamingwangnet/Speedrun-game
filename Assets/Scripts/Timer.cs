@@ -17,13 +17,24 @@ public class Timer : MonoBehaviour
     public int Seconds { get => seconds; }
     public float Milliseconds { get => milliseconds; }
 
+    public TimeData TimerData { get; set; }
+    public bool DoNotSetTime { get; set; }
+
+    private void Start()
+    {
+        if(!DoNotSetTime)
+            TimerData = new TimeData(hours, minutes, seconds, milliseconds);
+    }
+
     // Update is called once per frame
     void Update()
     {
-        string formattedMillisec = ((int)milliseconds < 100 ? ((int)milliseconds < 10 ? "00" + ((int)milliseconds) : "0" + ((int)milliseconds)) : ((int)milliseconds).ToString());
-        string formattedHours = (hours < 10 ? "0" + hours : hours.ToString());
-        string formattedMinutes = (minutes < 10 ? "0" + minutes : minutes.ToString());
-        string formattedSeconds = (seconds < 10 ? "0" + seconds : seconds.ToString());
+        string formattedMillisec = ((int)TimerData.Milliseconds < 100 ? ((int)TimerData.Milliseconds < 10 ? "00" + ((int)TimerData.Milliseconds) 
+            : "0" + ((int)TimerData.Milliseconds)) 
+            : ((int)TimerData.Milliseconds).ToString());
+        string formattedHours = (TimerData.Hours < 10 ? "0" + TimerData.Hours : TimerData.Hours.ToString());
+        string formattedMinutes = (TimerData.Minutes < 10 ? "0" + TimerData.Minutes : TimerData.Minutes.ToString());
+        string formattedSeconds = (TimerData.Seconds < 10 ? "0" + TimerData.Seconds : TimerData.Seconds.ToString());
 
 
         string time = $"{formattedHours}:" +
@@ -34,24 +45,24 @@ public class Timer : MonoBehaviour
 
         timeText.text = time;
 
-        if(milliseconds >= 1000f)
+        if(TimerData.Milliseconds >= 1000f)
         {
-            milliseconds = 0f;
-            seconds++;
+            TimerData.Milliseconds = 0f;
+            TimerData.Seconds++;
         }
 
-        if (seconds >= 60)
+        if (TimerData.Seconds >= 60)
         {
-            seconds = 0;
-            minutes++;
+            TimerData.Seconds = 0;
+            TimerData.Minutes++;
         }
 
-        if (minutes >= 60)
+        if (TimerData.Minutes >= 60)
         {
-            minutes = 0;
-            hours++;
+            TimerData.Minutes = 0;
+            TimerData.Hours++;
         }
 
-        milliseconds += Time.deltaTime * 1000f;
+        TimerData.Milliseconds += Time.deltaTime * 1000f;
     }
 }
