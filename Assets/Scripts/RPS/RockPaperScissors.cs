@@ -78,36 +78,15 @@ public class RockPaperScissors : MonoBehaviour
         }
         else if(playerChosen == RPS.Rock)
         {
-            if (comp == RPS.Paper)
-            {
-                hasWon = false;
-            }
-            else
-            {
-                hasWon = true;
-            }
+            hasWon = comp != RPS.Paper;
         }
         else if (playerChosen == RPS.Paper)
         {
-            if (comp == RPS.Scissors)
-            {
-                hasWon = false;
-            }
-            else
-            {
-                hasWon = true;
-            }
+            hasWon = comp != RPS.Scissors;
         }
         else if (playerChosen == RPS.Scissors)
         {
-            if (comp == RPS.Rock)
-            {
-                hasWon = false;
-            }
-            else
-            {
-                hasWon = true;
-            }
+            hasWon = comp != RPS.Rock;
         }
     }
 
