@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
@@ -18,6 +19,8 @@ public class Player : MonoBehaviour
         } 
     }
 
+    public int NextScene { get; private set; } = 1;
+
     private void Awake()
     {
         DontDestroyOnLoad(gameObject);
@@ -25,6 +28,7 @@ public class Player : MonoBehaviour
 
     public void NextGame()
     {
-
+        SceneManager.LoadScene(NextScene);
+        NextScene++;
     }
 }
