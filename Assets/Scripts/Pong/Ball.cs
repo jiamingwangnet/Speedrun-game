@@ -2,34 +2,37 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Ball : MonoBehaviour
+namespace Pong
 {
-    [SerializeField] private Vector2 initialVelocity;
-    private Vector2 velocity;
-
-    // Start is called before the first frame update
-    void Start()
+    public class Ball : MonoBehaviour
     {
-        velocity = initialVelocity;
-    }
+        [SerializeField] private Vector2 initialVelocity;
+        private Vector2 velocity;
 
-    // Update is called once per frame
-    void Update()
-    {
-        Vector3 movement = new Vector3(velocity.x, velocity.y) * Time.deltaTime;
-        transform.position += movement;
-    }
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        if(collision.transform.CompareTag("wall"))
+        // Start is called before the first frame update
+        void Start()
         {
-            velocity.y *= -1;
+            velocity = initialVelocity;
         }
-        
-        if(collision.transform.CompareTag("paddle"))
+
+        // Update is called once per frame
+        void Update()
         {
-            velocity.x *= -1;
+            Vector3 movement = new Vector3(velocity.x, velocity.y) * Time.deltaTime;
+            transform.position += movement;
+        }
+
+        private void OnCollisionEnter(Collision collision)
+        {
+            if (collision.transform.CompareTag("wall"))
+            {
+                velocity.y *= -1;
+            }
+
+            if (collision.transform.CompareTag("paddle"))
+            {
+                velocity.x *= -1;
+            }
         }
     }
 }

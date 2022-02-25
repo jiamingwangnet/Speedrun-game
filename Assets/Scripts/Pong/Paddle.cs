@@ -2,24 +2,27 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Paddle : MonoBehaviour
+namespace Pong
 {
-    [SerializeField] private float speed;
-
-    public void Move(int direction)
+    public class Paddle : MonoBehaviour
     {
-        transform.position += direction * speed * Time.deltaTime * Vector3.up; 
-    }
+        [SerializeField] private float speed;
 
-    private void Update()
-    {
-        if(Input.GetKey(KeyCode.UpArrow))
+        public void Move(int direction)
         {
-            Move(1);
+            transform.position += direction * speed * Time.deltaTime * Vector3.up;
         }
-        else if(Input.GetKey(KeyCode.DownArrow))
+
+        private void Update()
         {
-            Move(-1);
+            if (Input.GetKey(KeyCode.UpArrow))
+            {
+                Move(1);
+            }
+            else if (Input.GetKey(KeyCode.DownArrow))
+            {
+                Move(-1);
+            }
         }
     }
 }

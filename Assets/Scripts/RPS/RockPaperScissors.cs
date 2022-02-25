@@ -2,113 +2,117 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RockPaperScissors : MonoBehaviour
+namespace RPS
 {
-    [SerializeField] private GameObject rock;
-    [SerializeField] private GameObject paper;
-    [SerializeField] private GameObject scissors;
-
-    // where the things are placed
-    [SerializeField] private Transform computerPos;
-    [SerializeField] private Transform playerPos;
-
-    [SerializeField] private GameObject winText;
-
-    private enum RPS
+    public class RockPaperScissors : MonoBehaviour
     {
-        Rock,
-        Paper,
-        Scissors
-    }
+        [SerializeField] private GameObject rock;
+        [SerializeField] private GameObject paper;
+        [SerializeField] private GameObject scissors;
 
-    [SerializeField] private float playTimeout = 2f;
-    private float nextPlay = 0f;
-    private bool hasWon = false;
+        // where the things are placed
+        [SerializeField] private Transform computerPos;
+        [SerializeField] private Transform playerPos;
 
-    // Update is called once per frame
-    void Update()
-    {       
-        if (!hasWon)
+        [SerializeField] private GameObject winText;
+
+        private enum RPS
         {
-            if (Time.time >= nextPlay)
+            Rock,
+            Paper,
+            Scissors
+        }
+
+        [SerializeField] private float playTimeout = 2f;
+        private float nextPlay = 0f;
+        private bool hasWon = false;
+
+        // Update is called once per frame
+        void Update()
+        {
+            if (!hasWon)
             {
-                if (Input.GetKeyDown(KeyCode.R))
+                if (Time.time >= nextPlay)
                 {
-                    PlayGame(RPS.Rock, ref hasWon);
-                    nextPlay = Time.time + playTimeout;
-                }
-                else if (Input.GetKeyDown(KeyCode.P))
-                {
-                    PlayGame(RPS.Paper, ref hasWon);
-                    nextPlay = Time.time + playTimeout;
-                }
-                else if (Input.GetKeyDown(KeyCode.S))
-                {
-                    PlayGame(RPS.Scissors, ref hasWon);
-                    nextPlay = Time.time + playTimeout;
+                    if (Input.GetKeyDown(KeyCode.R))
+                    {
+                        PlayGame(RPS.Rock, ref hasWon);
+                        nextPlay = Time.time + playTimeout;
+                    }
+                    else if (Input.GetKeyDown(KeyCode.P))
+                    {
+                        PlayGame(RPS.Paper, ref hasWon);
+                        nextPlay = Time.time + playTimeout;
+                    }
+                    else if (Input.GetKeyDown(KeyCode.S))
+                    {
+                        PlayGame(RPS.Scissors, ref hasWon);
+                        nextPlay = Time.time + playTimeout;
+                    }
                 }
             }
-        } 
-        else
-        {
-            winText.SetActive(true);
-            if(Input.GetKeyDown(KeyCode.Space))
+            else
             {
-                Player.Instance.NextGame();
+                winText.SetActive(true);
+                if (Input.GetKeyDown(KeyCode.Space))
+                {
+                    Player.Instance.NextGame();
+                }
             }
-        } 
+        }
+
+        private void PlayGame(RPS playerChosen, ref bool hasWon)
+        {
+            RPS comp = ComputerPlay();
+
+            if (playerPos.childCount > 0 && computerPos.childCount > 0)
+            {
+                Destroy(playerPos.GetChild(0).gameObject);
+                Destroy(computerPos.GetChild(0).gameObject);
+            }
+
+            Instantiate(ConvertToGameObject(playerChosen), playerPos);
+            Instantiate(ConvertToGameObject(comp), computerPos);
+
+            if (playerChosen == comp)
+            {
+                hasWon = false;
+            }
+            else if (playerChosen == RPS.Rock)
+            {
+                hasWon = comp != RPS.Paper;
+            }
+            else if (playerChosen == RPS.Paper)
+            {
+                hasWon = comp != RPS.Scissors;
+            }
+            else if (playerChosen == RPS.Scissors)
+            {
+                hasWon = comp != RPS.Rock;
+            }
+        }
+
+        private RPS ComputerPlay()
+        {
+            int computerChosen = Random.Range(0, 3);
+
+            return (RPS)computerChosen;
+        }
+
+        private GameObject ConvertToGameObject(RPS play)
+        {
+            switch (play)
+            {
+                case RPS.Rock:
+                    return rock;
+                case RPS.Paper:
+                    return paper;
+                case RPS.Scissors:
+                    return scissors;
+                default:
+                    return null;
+            }
+        }
     }
 
-    private void PlayGame(RPS playerChosen, ref bool hasWon)
-    {
-        RPS comp = ComputerPlay();
-
-        if(playerPos.childCount > 0 && computerPos.childCount > 0)
-        {
-            Destroy(playerPos.GetChild(0).gameObject);
-            Destroy(computerPos.GetChild(0).gameObject);
-        }
-
-        Instantiate(ConvertToGameObject(playerChosen), playerPos);
-        Instantiate(ConvertToGameObject(comp), computerPos);
-
-        if(playerChosen == comp)
-        {
-            hasWon = false;   
-        }
-        else if(playerChosen == RPS.Rock)
-        {
-            hasWon = comp != RPS.Paper;
-        }
-        else if (playerChosen == RPS.Paper)
-        {
-            hasWon = comp != RPS.Scissors;
-        }
-        else if (playerChosen == RPS.Scissors)
-        {
-            hasWon = comp != RPS.Rock;
-        }
-    }
-
-    private RPS ComputerPlay()
-    {
-        int computerChosen = Random.Range(0, 3);
-
-        return (RPS)computerChosen;
-    }
-
-    private GameObject ConvertToGameObject(RPS play)
-    {
-        switch (play)
-        {
-            case RPS.Rock:
-                return rock;
-            case RPS.Paper:
-                return paper;
-            case RPS.Scissors:
-                return scissors;
-            default:
-                return null;
-        }
-    }
 }
