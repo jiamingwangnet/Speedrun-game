@@ -34,5 +34,11 @@ namespace Pong
                 velocity.x *= -1;
             }
         }
+
+        public void ResetPos()
+        {
+            transform.position = Vector3.zero;
+            velocity = initialVelocity;
+        }
     }
 }

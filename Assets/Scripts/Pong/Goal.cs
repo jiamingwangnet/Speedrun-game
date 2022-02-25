@@ -20,6 +20,7 @@ namespace Pong
             if (other.transform.CompareTag("ball"))
             {
                 tracker.IncreasePoints(side);
+                other.transform.GetComponent<Ball>().ResetPos();
             }
         }
     }
